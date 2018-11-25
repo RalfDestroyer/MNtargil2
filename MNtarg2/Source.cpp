@@ -7,6 +7,7 @@
 
 using namespace std;
 
+// Rafael Lerman t.z. 327367488
 int main()
 {
 	HuffmanTree tree;
@@ -37,16 +38,12 @@ int main()
 			string letters, treeStruct, bCode;
 			cout << "enter n ";
 				cin >> n; 
-				cout << endl;
 			cout << "enter the letters ";
 				cin >> letters;
-				cout << endl;
 			cout << "enter the encoded structure ";
 				cin >> treeStruct;
-				cout << endl;
 			cout << "enter the encoded text ";
 				cin >> bCode;
-				cout << endl;
 
 
 			cout << "The decoded string is:" << endl;

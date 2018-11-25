@@ -48,6 +48,7 @@ HuffmanTree::~HuffmanTree()
 	delete root;
 }
 
+// func create program backend for encode
 void HuffmanTree::buildProcces(string word)
 {
 	listOfLetters(word);
@@ -57,6 +58,7 @@ void HuffmanTree::buildProcces(string word)
 	return;
 }
 
+// output of program for encode
 void HuffmanTree::runTask(string word)
 {
 	cout << lOL.size() << endl;
@@ -66,6 +68,7 @@ void HuffmanTree::runTask(string word)
 	return;
 }
 
+// func create program backend for decode
 void HuffmanTree::buildDecode(string letters, string treeStruct)
 {
 	listOfLetters(letters);
@@ -73,6 +76,7 @@ void HuffmanTree::buildDecode(string letters, string treeStruct)
 	upgradeBinCode();
 }
 
+// output of program for decode
 void HuffmanTree::runDecode(string bCode)
 {
 	string tmp;
@@ -92,14 +96,14 @@ void HuffmanTree::runDecode(string bCode)
 }
 
 
-
+// build list from each letter (char) each that in code
 void HuffmanTree::listOfLetters(string word)
 {
 	list<letter> listLetter;
 
 	int size = word.size();
-	int count = 1;
-	char space = (char)32; //help char
+	int count = 1; // help value for calc frequency of each char
+	char space = (char)32; //help char - "space"
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = i+1; j < size; j++)
@@ -120,20 +124,22 @@ void HuffmanTree::listOfLetters(string word)
 		}
 	}
 
+	// sort this list and initilaze in huffman field
 	listLetter.sort();
-	//
-	//
 	lOL = listLetter;
 	return;
 }
 
+// func build structure of huffman tree
 void HuffmanTree::kidud(Node* n)
 {
+	// if comes to leaf ->output 1
 	if ((n->_left == NULL) && (n->_right == NULL))
 	{
 		cout << "1";
 		return;
 	}
+	//else output 0 and still go to leaf
 	else
 	{
 		cout << "0";
@@ -144,29 +150,35 @@ void HuffmanTree::kidud(Node* n)
 	}
 }
 
+// updating binary code for each letter in list of letters
 void HuffmanTree::upgradeBinCode()
 {
 	Node* tmp;
+	// for each letter in list of letter`s do:
 	for (letter &i : lOL)
 	{
 		tmp = root;
+		// do while comes to leaf
 		while ((tmp->_left != NULL) && (tmp->_right != NULL))
 		{
+			//if found same chars in right node
 			if (findCharInStr(i.getStr(), tmp->_right->_nLetter.getStr()))
 			{
-				i.setBCode("1");
-				tmp = tmp->_right;
+				i.setBCode("1"); // update letter`s bin code by adding him "1"
+				tmp = tmp->_right; // go to right
 			}
+			// else chars are in left node
 			else
 			{
-				i.setBCode("0");
-				tmp = tmp->_left;
+				i.setBCode("0");// update letter`s bin code by adding him "0"
+				tmp = tmp->_left; // go to left
 			}
 		}
 	}
 	return;
 }
 
+// help func that help to find char in some string
 bool HuffmanTree::findCharInStr(string chr, string str)
 {
 
@@ -178,14 +190,18 @@ bool HuffmanTree::findCharInStr(string chr, string str)
 	return false;
 }
 
+// func output encoded message of inputed word
 void HuffmanTree::encode(string word)
 {
+	// for each char in word
 	for (int i = 0; i < word.size(); i++)
 	{
+		//find same char in list of letters
 		for (letter j : lOL)
 		{
 			if (j.getStr()[0] == word[i])
 			{
+				// print his binary code
 				cout << j.getBCode();
 			}
 		}
@@ -193,41 +209,28 @@ void HuffmanTree::encode(string word)
 	return;
 }
 
+// func build tree for decode by using iputed struct and word`s in code
 void HuffmanTree::decodeTree(Node* &n, string &tStruct, string &letters)
 {
-	if (tStruct.size() != 0) 
+	if (tStruct.size() != 0) // while struct of tree not empty
 	{
-		if (tStruct[0] == '0')
+		if (tStruct[0] == '0') // if first char is "0"
 		{
-			n = new Node(letters);
-			tStruct.erase(0, 1);
-			decodeTree(n->_left, tStruct, letters);
-			decodeTree(n->_right, tStruct, letters);
-			n->_nLetter.setStr(n->_left->_nLetter.getStr() + n->_right->_nLetter.getStr());
+			n = new Node(letters); // create new node in tree
+			tStruct.erase(0, 1); // detele firt char in struct
+			decodeTree(n->_left, tStruct, letters); // still to decode struct in left side
+			decodeTree(n->_right, tStruct, letters); // still to decode struct in right side
+			// update Node name letter from his updated sons
+			n->_nLetter.setStr(n->_left->_nLetter.getStr() + n->_right->_nLetter.getStr()); 
 			return;
 		}
-		if (tStruct[0] == '1')
+		if (tStruct[0] == '1') // if first char is "1" - we comes to leaf
 		{
-			n = new Node(letters.front());
-			letters.erase(0, 1);
-			tStruct.erase(0, 1);
+			n = new Node(letters.front()); // create new node, give him name of first char in inputed word, son`s are NULL
+			letters.erase(0, 1); // detele firt char in struct
+			tStruct.erase(0, 1); // detele firt char in inputed word
 			return;
 		}
 	}
 	return;
-}
-
-void HuffmanTree::buildTreeForDecode(Node* &n, string &letters)
-{
-	if ((n->_left == NULL) && (n->_right == NULL))
-	{
-		n->_nLetter.setStr(letters.front());
-		letters.erase(0, 1);
-	}
-	else
-	{
-		buildTreeForDecode(n->_left, letters);
-		buildTreeForDecode(n->_right, letters);
-		return;
-	}
 }

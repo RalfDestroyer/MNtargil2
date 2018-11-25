@@ -1,7 +1,7 @@
 #include "letter.h"
 
 
-
+#pragma region get&set
 string letter::getStr()
 {
 	return _str;
@@ -51,7 +51,10 @@ void letter::setFreq(int freq)
 	_freq = freq;
 	return;
 }
+#pragma endregion
 
+
+#pragma region operators
 letter& letter::operator=(letter another)
 {
 	this->_freq = another._freq;
@@ -82,7 +85,9 @@ letter letter::operator+(letter another)
 	temp._str = this->_str + another._str;
 	return temp;
 }
+#pragma endregion
 
+#pragma region ctors
 letter::letter(string str , int freq)
 {
 	_str = str;
@@ -101,3 +106,4 @@ letter::letter(char _char, int freq)
 letter::~letter()
 {
 }
+#pragma endregion

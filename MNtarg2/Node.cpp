@@ -2,7 +2,7 @@
 
 
 
-
+#pragma region ctors
 Node::Node()
 {
 	letter temp;
@@ -30,7 +30,10 @@ Node::~Node()
 	delete _left;
 	delete _right;
 }
+#pragma endregion
 
+
+//operators
 bool Node::operator>(Node another)
 {
 	return (this->_nLetter > another._nLetter);
